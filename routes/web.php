@@ -11,26 +11,24 @@ use App\Http\Controllers\PreguntaFrecuenteController;
 use App\Http\Controllers\RespuestaAutomatizadaController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\ProfileController;
+
 // Rutas de roles
-Route::resource('roles', RolController::class);
+Route::middleware(['auth'])->group(function () {
+    Route::resource('roles', RolController::class);
+    Route::resource('cursos', CursoController::class);
 
-// Rutas de cursos
-Route::resource('cursos', CursoController::class);
+    Route::get('/chats', [ChatController::class, 'index'])->name('chats.index');
+    Route::get('chats/{id}', [ChatController::class, 'show'])->name('chats.show');
+    Route::post('/chats', [ChatController::class, 'store'])->name('chats.store');
 
+    Route::resource('interacciones', InteraccionController::class);
 
-Route::get('/chats', [ChatController::class, 'index'])->name('chats.index');
-Route::get('chats/{id}', [ChatController::class, 'show'])->name('chats.show');
-// Ruta para almacenar un nuevo chat (POST)
-Route::post('/chats', [ChatController::class, 'store'])->name('chats.store');
+    // Rutas de preguntas frecuentes
+    Route::resource('preguntas-frecuentes', PreguntaFrecuenteController::class);
 
-
-Route::resource('interacciones', InteraccionController::class);
-
-// Rutas de preguntas frecuentes
-Route::resource('preguntas-frecuentes', PreguntaFrecuenteController::class);
-
-// Rutas de respuestas automatizadas
-Route::resource('respuestas', RespuestaAutomatizadaController::class);
+    // Rutas de respuestas automatizadas
+    Route::resource('respuestas', RespuestaAutomatizadaController::class);
+});
 
 // Ruta principal (opcional)
 Route::get('/', function () {
