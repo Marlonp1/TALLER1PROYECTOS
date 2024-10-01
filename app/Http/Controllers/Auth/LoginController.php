@@ -54,7 +54,7 @@ class LoginController extends Controller
 
                 // Redirigir según el rol
                 if ($user->id_rol == 2) {
-                    return redirect()->route('ruta_del_profesor'); // Cambia 'ruta_del_profesor' a tu ruta específica
+                    return redirect()->route('profesor.index'); // Cambia 'ruta_del_profesor' a tu ruta específica
                 }
 
                 return redirect()->intended($this->redirectTo);
