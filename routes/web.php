@@ -11,7 +11,8 @@ use App\Http\Controllers\PreguntaFrecuenteController;
 use App\Http\Controllers\RespuestaAutomatizadaController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\ProfileController;
-
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\ProfesorController;
 // Rutas de roles
 Route::middleware(['auth'])->group(function () {
     Route::resource('roles', RolController::class);
@@ -40,3 +41,6 @@ Auth::routes();
 
 // Ruta de inicio de sesión
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+// Ruta para usuarios con rol 2
+Route::get('/profesor', [App\Http\Controllers\ProfesorController::class, 'index'])->name('ruta_del_profesor');
