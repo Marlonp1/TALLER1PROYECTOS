@@ -24,6 +24,13 @@
                     </div>
 
                     <div class="row text-center">
+                        <!-- Mostrar el primer nombre del usuario -->
+                        <div class="col-md-12">
+                            @if (Auth::check())
+                                <h6 class="text-muted">Usuario: {{ explode(' ', Auth::user()->nombre)[0] }}</h6>
+                            @endif
+                        </div>
+                        
                         <!-- Card para Chats -->
                         <div class="col-md-12 mb-4">
                             <div class="card shadow-sm border-success">
