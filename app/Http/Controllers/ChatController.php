@@ -12,8 +12,9 @@ class ChatController extends Controller
     // Muestra todos los chats y los cursos disponibles
     public function index()
     {
-        $chats = Chat::with('curso')->where('id_usuario', auth()->id())->get();
+        
         $cursos = Curso::all(); // Obtener todos los cursos disponibles
+        $chats = Chat::with('curso')->get();
 
         return view('chats.index', compact('chats', 'cursos')); // Pasar ambos a la vista
     }

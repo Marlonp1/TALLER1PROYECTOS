@@ -1,4 +1,3 @@
-<!-- resources/views/profesor/usuarios/index.blade.php -->
 @extends('layouts.app')
 
 @section('content')
@@ -17,12 +16,12 @@
         <tbody>
             @foreach($usuarios as $usuario)
             <tr>
-                <td>{{ $usuario->id }}</td>
-                <td>{{ $usuario->name }}</td>
+                <td>{{ $usuario->id_usuario }}</td>
+                <td>{{ $usuario->nombre }}</td>
                 <td>{{ $usuario->correo }}</td>
                 <td>
-                    <a href="{{ route('profesor.usuarios.edit', $usuario->id) }}" class="btn btn-warning">Editar</a>
-                    <form action="{{ route('profesor.usuarios.destroy', $usuario->id) }}" method="POST" style="display:inline;">
+                    <a href="{{ route('profesor.usuarios.edit', $usuario->id_usuario) }}" class="btn btn-warning">Editar</a>
+                    <form action="{{ route('profesor.usuarios.destroy', $usuario->id_usuario) }}" method="POST" style="display:inline;">
                         @csrf
                         @method('DELETE')
                         <button type="submit" class="btn btn-danger">Eliminar</button>

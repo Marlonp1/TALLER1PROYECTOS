@@ -1,4 +1,3 @@
-<!-- resources/views/profesor/chats/index.blade.php -->
 @extends('layouts.app')
 
 @section('content')
@@ -18,7 +17,7 @@
             @foreach($chats as $chat)
             <tr>
                 <td>{{ $chat->id_chat }}</td>
-                <td>{{ $chat->curso->nombre }}</td>
+                <td>{{ $chat->curso ? $chat->curso->nombre_curso : 'Sin Curso' }}</td> <!-- Mostrar el nombre del curso -->
                 <td>{{ $chat->estado_chat }}</td>
                 <td>
                     <a href="{{ route('profesor.chats.edit', $chat->id_chat) }}" class="btn btn-warning">Editar</a>

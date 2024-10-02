@@ -4,12 +4,12 @@
 @section('content')
 <div class="container">
     <h1>Editar Usuario</h1>
-    <form action="{{ route('profesor.usuarios.update', $usuario->id) }}" method="POST">
+    <form action="{{ route('profesor.usuarios.update', $usuario->id_usuario) }}" method="POST">
         @csrf
         @method('PUT')
         <div class="form-group">
             <label for="name">Nombre</label>
-            <input type="text" class="form-control" name="name" value="{{ $usuario->name }}" required>
+            <input type="text" class="form-control" name="nombre" value="{{ $usuario->nombre }}" required>
         </div>
         <div class="form-group">
             <label for="correo">Correo</label>

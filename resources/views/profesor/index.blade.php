@@ -1,36 +1,68 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Página del Profesor</title>
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
-</head>
-<body>
-    <h1>Bienvenido, Profesor</h1>
-    <p>Esta es la página principal para los usuarios con rol de profesor.</p>
+@extends('layouts.app')
 
-    <h2>Gestión de Usuarios</h2>
-    <ul>
-        <li><a href="{{ route('profesor.usuarios.index') }}">Ver Usuarios</a></li>
-        <li><a href="{{ route('profesor.usuarios.create') }}">Agregar Usuario</a></li>
-    </ul>
+@section('content')
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                    <h4 class="mb-0">{{ __('Panel de Control') }}</h4>
+                    <span class="badge bg-success">{{ __('En línea') }}</span>
+                </div>
 
-    <h2>Gestión de Cursos</h2>
-    <ul>
-        <li><a href="{{ route('profesor.cursos.index') }}">Ver Cursos</a></li>
-        <li><a href="{{ route('profesor.cursos.create') }}">Agregar Curso</a></li>
-    </ul>
+                <div class="card-body">
+                    @if (session('status'))
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <strong>{{ session('status') }}</strong>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
 
-    <h2>Gestión de Chats</h2>
-    <ul>
-        <li><a href="{{ route('profesor.chats.index') }}">Ver Chats</a></li>
-        <li><a href="{{ route('profesor.chats.create') }}">Agregar Chat</a></li>
-    </ul>
+                    <div class="text-center my-4">
+                        <h5>{{ __('¡Bienvenido de nuevo!') }}</h5>
+                        <p class="lead">{{ __('Has iniciado sesión con éxito.') }}</p>
+                    </div>
 
-    <form action="{{ route('profesor.logout') }}" method="POST" style="margin-top: 20px;">
-        @csrf
-        <button type="submit">Cerrar Sesión</button>
-    </form>
-</body>
-</html>
+                    <div class="row text-center">
+                        <!-- Mostrar el primer nombre del usuario -->
+                        <div class="col-md-12">
+                            @if (Auth::check())
+                                <h6 class="text-muted">Usuario: {{ explode(' ', Auth::user()->nombre)[0] }}</h6>
+                            @endif
+                        </div>
+
+                        <!-- Botones de gestión -->
+                        <div class="col-md-12 mb-4">
+                            <h5 class="mb-3">{{ __('Gestión') }}</h5>
+                            <div class="row">
+                                <!-- Botón Gestionar Usuario -->
+                                <div class="col-md-4">
+                                    <a href="{{ route('profesor.usuarios.index') }}" class="btn btn-outline-primary btn-block">{{ __('Gestionar Usuario') }}</a>
+                                </div>
+
+                                <!-- Botón Gestionar Curso -->
+                                <div class="col-md-4">
+                                    <a href="{{ route('profesor.cursos.index') }}" class="btn btn-outline-primary btn-block">{{ __('Gestionar Curso') }}</a>
+                                </div>
+
+                                <!-- Botón Gestionar Chats -->
+                                <div class="col-md-4">
+                                    <a href="{{ route('profesor.chats.index') }}" class="btn btn-outline-primary btn-block">{{ __('Gestionar Chats') }}</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-end mt-4">
+                        <a href="{{ route('logout') }}" class="btn btn-secondary">{{ __('Cerrar sesión') }}</a>
+                    </div>
+                </div>
+
+                <div class="card-footer text-muted text-center">
+                    {{ __('Último inicio de sesión: ') }} {{ \Carbon\Carbon::now()->subDays(1)->format('d M, Y h:i A') }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection

@@ -12,8 +12,7 @@ class Chat extends Model
     protected $primaryKey = 'id_chat'; // Llave primaria
 
     // Campos asignables masivamente
-    protected $fillable = ['usuario_id', 'curso_id', 'tipo_pregunta', 'estado_chat', 'fecha_inicio', 'fecha_cierre'];
-
+    protected $fillable = ['id_usuario', 'id_curso', 'tipo_pregunta', 'estado_chat', 'fecha_inicio', 'fecha_cierre'];
 
     // Relación con la tabla Usuarios (un chat pertenece a un usuario)
     public function usuario()
@@ -32,9 +31,9 @@ class Chat extends Model
     {
         return $this->hasMany(RespuestasAutomatizadas::class, 'id_chat', 'id_chat');
     }
+
     public function curso()
     {
-        return $this->belongsTo(Curso::class, 'id_curso');
+        return $this->belongsTo(Curso::class, 'id_curso', 'id_curso'); // Asegúrate que esté correcto
     }
-
 }
