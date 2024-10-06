@@ -27,35 +27,37 @@
                         <!-- Mostrar el primer nombre del usuario -->
                         <div class="col-md-12">
                             @if (Auth::check())
-                                <h6 class="text-muted">Usuario: {{ explode(' ', Auth::user()->nombre)[0] }}</h6>
+                                <h6 class="text-muted">Usuario Profesor: {{ explode(' ', Auth::user()->nombre)[0] }}</h6>
                             @endif
                         </div>
 
                         <!-- Botones de gestión -->
                         <div class="col-md-12 mb-4">
-                            <h5 class="mb-3">{{ __('Gestión') }}</h5>
                             <div class="row">
                                 <!-- Botón Gestionar Usuario -->
                                 <div class="col-md-4">
-                                    <a href="{{ route('profesor.usuarios.index') }}" class="btn btn-outline-primary btn-block">{{ __('Gestionar Usuario') }}</a>
+                                    <a href="{{ route('profesor.usuarios.index') }}" class="btn btn-outline-primary btn-block" style="transition: background-color 0.3s, transform 0.3s;" onmouseover="this.style.backgroundColor='#007bff'; this.style.color='white'; this.style.transform='scale(1.05');" onmouseout="this.style.backgroundColor='transparent'; this.style.color=''; this.style.transform='scale(1)';">
+                                        {{ __('Gestionar Usuario') }}
+                                    </a>
                                 </div>
 
                                 <!-- Botón Gestionar Curso -->
                                 <div class="col-md-4">
-                                    <a href="{{ route('profesor.cursos.index') }}" class="btn btn-outline-primary btn-block">{{ __('Gestionar Curso') }}</a>
+                                    <a href="{{ route('profesor.cursos.index') }}" class="btn btn-outline-success btn-block" style="transition: background-color 0.3s, transform 0.3s;" onmouseover="this.style.backgroundColor='#28a745'; this.style.color='white'; this.style.transform='scale(1.05');" onmouseout="this.style.backgroundColor='transparent'; this.style.color=''; this.style.transform='scale(1)';">
+                                        {{ __('Gestionar Curso') }}
+                                    </a>
                                 </div>
 
                                 <!-- Botón Gestionar Chats -->
                                 <div class="col-md-4">
-                                    <a href="{{ route('profesor.chats.index') }}" class="btn btn-outline-primary btn-block">{{ __('Gestionar Chats') }}</a>
+                                    <a href="{{ route('profesor.chats.index') }}" class="btn btn-outline-warning btn-block" style="transition: background-color 0.3s, transform 0.3s;" onmouseover="this.style.backgroundColor='#ffc107'; this.style.color='white'; this.style.transform='scale(1.05');" onmouseout="this.style.backgroundColor='transparent'; this.style.color=''; this.style.transform='scale(1)';">
+                                        {{ __('Gestionar Chats') }}
+                                    </a>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="d-flex justify-content-end mt-4">
-                        <a href="{{ route('logout') }}" class="btn btn-secondary">{{ __('Cerrar sesión') }}</a>
-                    </div>
                 </div>
 
                 <div class="card-footer text-muted text-center">

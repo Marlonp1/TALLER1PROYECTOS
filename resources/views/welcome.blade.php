@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-10">
-            <div class="card shadow-lg border-0">
+<div class="container" style="background: url('/images/dashboard-background.jpg') no-repeat center center; background-size: cover; min-height: 100vh;">
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-8">
+            <div class="card shadow-lg rounded border-0" style="background: rgba(255, 255, 255, 0.85);">
                 <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
                     <h4 class="mb-0">{{ __('Panel de Control') }}</h4>
                     <span class="badge bg-success">{{ __('En línea') }}</span>
@@ -25,12 +25,12 @@
 
                     <div class="row text-center">
                         <!-- Mostrar el primer nombre del usuario -->
-                        <div class="col-md-12">
+                        <div class="col-md-12 mb-4">
                             @if (Auth::check())
-                                <h6 class="text-muted">Usuario: {{ explode(' ', Auth::user()->nombre)[0] }}</h6>
+                                <h6 class="text-muted">{{ __('Usuario: ') }}{{ explode(' ', Auth::user()->nombre)[0] }}</h6>
                             @endif
                         </div>
-                        
+
                         <!-- Card para Chats -->
                         <div class="col-md-12 mb-4">
                             <div class="card shadow-sm border-success">
@@ -41,10 +41,6 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-
-                    <div class="d-flex justify-content-end mt-4">
-                        <a href="{{ route('logout') }}" class="btn btn-secondary">{{ __('Cerrar sesión') }}</a>
                     </div>
                 </div>
 
