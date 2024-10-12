@@ -105,4 +105,49 @@ class RegistrationTest extends TestCase
         $response->assertSessionHasErrors(['contraseña']);
     }
     
+    public function test_name_must_contain_at_least_one_space()
+{
+    $response = $this->withoutMiddleware()->post('/register', [
+        'nombre' => 'John', // Sin espacio
+        'correo' => 'test@example.com',
+        'contraseña' => 'Password1!',
+        'contraseña_confirmation' => 'Password1!',
+    ]);
+    $response->assertSessionHasErrors(['nombre']);
+}
+
+public function test_name_must_not_contain_special_characters()
+{
+    $response = $this->withoutMiddleware()->post('/register', [
+        'nombre' => 'John@Doe', // Contiene un carácter especial
+        'correo' => 'test@example.com',
+        'contraseña' => 'Password1!',
+        'contraseña_confirmation' => 'Password1!',
+    ]);
+    $response->assertSessionHasErrors(['nombre']);
+}
+
+public function test_name_must_not_contain_numbers()
+{
+    $response = $this->withoutMiddleware()->post('/register', [
+        'nombre' => 'John123 Doe', // Contiene números
+        'correo' => 'test@example.com',
+        'contraseña' => 'Password1!',
+        'contraseña_confirmation' => 'Password1!',
+    ]);
+    $response->assertSessionHasErrors(['nombre']);
+}
+
+public function test_name_must_not_exceed_maximum_length()
+{
+    $longName = str_repeat('A', 101); // 101 caracteres
+    $response = $this->withoutMiddleware()->post('/register', [
+        'nombre' => $longName,
+        'correo' => 'test@example.com',
+        'contraseña' => 'Password1!',
+        'contraseña_confirmation' => 'Password1!',
+    ]);
+    $response->assertSessionHasErrors(['nombre']);
+}
+
 }

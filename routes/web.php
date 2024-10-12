@@ -22,6 +22,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/chats', [ChatController::class, 'index'])->name('chats.index');
     Route::get('chats/{id}', [ChatController::class, 'show'])->name('chats.show');
     Route::post('/chats', [ChatController::class, 'store'])->name('chats.store');
+   
+
 
     Route::resource('interacciones', InteraccionController::class);
 

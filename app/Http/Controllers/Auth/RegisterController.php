@@ -50,18 +50,34 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'nombre' => ['required', 'string', 'max:100'],
+            'nombre' => [
+                'required', 
+                'string', 
+                'max:100',
+               'regex:/^(?=.*\s)[A-Za-zÀ-ÿ\s]+$/',
+            ],
             'correo' => ['required', 'string', 'email', 'max:100', 'unique:usuarios,correo'],
             'contraseña' => [
                 'required',
                 'string',
-                'min:8', // Mínimo de 8 caracteres
-                'confirmed',
-                'regex:/[A-Z]/', // Al menos una mayúscula
-                'regex:/[!@#$%^&*(),.?":{}|<>]/' // Al menos un carácter especial
+                'min:8', // Al menos 8 caracteres
+                'confirmed', // Debe coincidir con la confirmación
+                'regex:/[A-Z]/', // Al menos una letra mayúscula
+                'regex:/[!@#$%^&*(),.?":{}|<>]/', // Al menos un carácter especial
             ],
+        ], [
+            'nombre.required' => 'El nombre es obligatorio.',
+            'nombre.regex' => 'El nombre solo debe contener letras y espacios.',
+            'correo.required' => 'El correo electrónico es obligatorio.',
+            'correo.email' => 'El correo electrónico debe ser una dirección de correo válida.',
+            'contraseña.required' => 'La contraseña es obligatoria.',
+            'contraseña.min' => 'La contraseña debe tener al menos 8 caracteres.',
+            'contraseña.confirmed' => 'La confirmación de la contraseña no coincide.',
+            'contraseña.regex' => 'La contraseña debe contener al menos una letra mayúscula y un carácter especial.',
         ]);
     }
+
+
 
 
     /**
@@ -76,7 +92,7 @@ class RegisterController extends Controller
             'nombre' => $data['nombre'], // Asegúrate de que este campo coincide con tu base de datos
             'correo' => $data['correo'], // Cambiado de 'email' a 'correo'
             'contraseña' => Hash::make($data['contraseña']), // Cambiado de 'password' a 'contraseña' y asegúrate de usar el hash para la contraseña
-            'id_rol' => 1, // O el rol que desees asignar por defecto
+            'id_rol' => 2, // O el rol que desees asignar por defecto
         ]);
         
     }

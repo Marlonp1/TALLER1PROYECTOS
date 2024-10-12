@@ -12,7 +12,6 @@ class ChatController extends Controller
     // Muestra todos los chats y los cursos disponibles
     public function index()
     {
-        
         $cursos = Curso::all(); // Obtener todos los cursos disponibles
         $chats = Chat::with('curso')->get();
 
@@ -52,10 +51,120 @@ class ChatController extends Controller
 
         return redirect()->route('chats.index')->with('success', 'Chat cerrado.');
     }
+
+    // Muestra un chat específico y su información
     public function show($id)
-{
-    // Obtener el chat por ID
-    $chat = Chat::with('curso')->findOrFail($id);
-    return view('chats.show', compact('chat'));
-}
+    {
+        // Obtener el chat por ID
+        $chat = Chat::with('curso')->findOrFail($id);
+        
+        $dataSet = $this->loadDataSet();
+
+        // Suponiendo que tienes una variable para el mensaje del usuario
+        $userMessage = "¿Cuál es tu pregunta aquí?"; // Cambia esto según tu lógica
+
+        // Obtener la respuesta más cercana
+        $response = $this->getClosestResponse($userMessage, $dataSet);
+        
+        // Verificar si hay una respuesta válida
+        if (empty($response)) {
+            $response = "Lo siento, no tengo información específica sobre eso. ¿Te gustaría preguntar otra cosa?";
+        }
+
+        // Pasar el dataset y la respuesta a la vista
+        return view('chats.show', compact('chat', 'dataSet', 'response'));
+    }
+
+    // Carga el dataset desde el archivo CSV
+    private function loadDataSet()
+    {
+        $dataSet = [];
+        $csvFilePath = storage_path('app/datasets/data.csv');
+
+        if (($handle = fopen($csvFilePath, 'r')) !== FALSE) {
+            // Leer la primera fila (cabeceras)
+            $headerRow = fgetcsv($handle);
+
+            // Asegúrate de que las cabeceras estén correctamente formateadas
+            if ($headerRow !== false) {
+                // Leer cada fila
+                while (($data = fgetcsv($handle)) !== FALSE) {
+                    // Asegurarse de que cada fila tenga el mismo número de columnas
+                    if (count($data) === count($headerRow)) {
+                        $dataSet[] = array_combine($headerRow, $data); // Combinar con las cabeceras
+                    }
+                }
+            }
+            fclose($handle);
+        }
+
+        return $dataSet;
+    }
+
+    // Nueva función para obtener la respuesta más cercana usando coincidencia difusa
+    public function getClosestResponse($userMessage, $dataSet)
+    {
+        $bestMatch = "";
+        $highestSimilarity = 0; // Cambiado a 0 para comparación adecuada
+
+        // Normalizar el mensaje del usuario
+        $userMessage = $this->normalizeText($userMessage);
+
+        // Recorrer cada entrada del dataset
+        foreach ($dataSet as $data) {
+            // Normalizar la pregunta actual
+            $currentQuestion = $this->normalizeText($data['question']);
+            
+            // Calcular la distancia de Levenshtein
+            $similarity = levenshtein($userMessage, $currentQuestion);
+
+            // Convertir la similitud a un puntaje entre 0 y 1
+            $maxLength = max(strlen($userMessage), strlen($currentQuestion));
+            $similarityScore = $maxLength > 0 ? 1 - ($similarity / $maxLength) : 0; // Evitar división por cero
+
+            // Verificar si este es el mejor partido
+            if ($similarityScore > $highestSimilarity) {
+                $highestSimilarity = $similarityScore;
+                $bestMatch = $data['answer']; // Cambiado para usar 'answer' como respuesta
+            }
+        }
+
+        // Retornar la mejor coincidencia o una respuesta alternativa si no se encontró coincidencia
+        return $highestSimilarity > 0.5 ? $bestMatch : "Lo siento, no tengo información específica sobre eso.";
+    }
+
+    private function normalizeText($text)
+    {
+        // Eliminar signos de puntuación y convertir a minúsculas
+        $text = strtolower($text);
+        $text = preg_replace('/[¿?!.,"\'()]/', '', $text); // Elimina varios signos de puntuación
+        $text = str_replace(['á', 'é', 'í', 'ó', 'ú'], ['a', 'e', 'i', 'o', 'u'], $text); // Quitar tildes
+        return trim($text); // Eliminar espacios al inicio y final
+    }
+
+    // Controlador ChatbotController.php
+    public function getSuggestedQuestions($category) 
+    {
+        $questions = [];
+        
+        // Leer el CSV y buscar las preguntas de la misma categoría
+        $csvFilePath = storage_path('app/datasets/data.csv');
+        
+        if (($handle = fopen($csvFilePath, 'r')) !== FALSE) {
+            // Leer la primera fila (cabeceras)
+            $headerRow = fgetcsv($handle);
+            while (($data = fgetcsv($handle, 1000, ',')) !== FALSE) {
+                if (isset($data[3]) && $data[3] === $category) {
+                    $questions[] = [
+                        'id' => $data[0],
+                        'question' => $data[1],
+                    ];
+                }
+            }
+            fclose($handle);
+        }
+
+        return response()->json($questions);
+    }
+    
 }
