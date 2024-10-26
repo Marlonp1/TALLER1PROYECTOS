@@ -12,27 +12,27 @@ class LoginTest extends TestCase
 
     public function test_login_with_valid_credentials()
     {
-        // Crear un usuario con credenciales válidas
+        
         $user = User::create([
             'nombre' => 'Valid User',
             'correo' => 'valid@example.com',
             'contraseña' => Hash::make('Password1!'),
-            'estado' => 1, // Usuario activo
+            'estado' => 1, 
         ]);
 
-        // Intentar iniciar sesión con credenciales válidas
+
         $response = $this->withoutMiddleware()->post('/login', [
             'correo' => 'valid@example.com',
             'contraseña' => 'Password1!',
         ]);
 
-        // Verificar que la redirección es correcta
-        $response->assertRedirect('/home'); // Cambia esto si es necesario
+     
+        $response->assertRedirect('/home'); 
     }
 
     public function test_login_with_invalid_credentials()
     {
-        // Intentar iniciar sesión con credenciales incorrectas
+        
         $response = $this->withoutMiddleware()->post('/login', [
             'correo' => 'wrong@example.com', // Correo no existente
             'contraseña' => 'WrongPassword!',  // Contraseña incorrecta

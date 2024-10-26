@@ -225,7 +225,10 @@
             userMessage = userMessage.replace(/porque/gi, 'por qué');
             return userMessage.trim(); // Limpiar espacios
         }
-
+    function goToQuizz() {
+    // Redirigir a la página del Quizz
+    window.location.href = 'http://localhost:8080/ConsolidadoPruebasGrupo01/public/quizz';
+}
 
         // Enviar el mensaje
         function sendMessage() {
@@ -280,6 +283,13 @@
             <button onclick="sendMessage()">Enviar</button>
         </div>
         <div id="suggestions"></div>
+        <div style="text-align: center; margin-top: 15px;">
+            <button onclick="goToQuizz()" style="padding: 12px 30px; border: none; border-radius: 5px; background-color: #ff7043; color: white; cursor: pointer; transition: background-color 0.3s ease; font-size: 1rem;">
+                Ir a Quizz
+            </button>
+            
+        </div>
+        
     </div>
 </body>
 </html>

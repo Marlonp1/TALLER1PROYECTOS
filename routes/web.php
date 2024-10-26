@@ -13,7 +13,10 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ProfesorController;
+use App\Http\Controllers\QuizzController;
 
+
+Route::get('/quizz', [QuizzController::class, 'index'])->name('quizz.index');
 // Rutas de roles
 Route::middleware(['auth'])->group(function () {
     Route::resource('roles', RolController::class);
@@ -22,7 +25,16 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/chats', [ChatController::class, 'index'])->name('chats.index');
     Route::get('chats/{id}', [ChatController::class, 'show'])->name('chats.show');
     Route::post('/chats', [ChatController::class, 'store'])->name('chats.store');
-   
+   // Rutas para el Quizz dentro de un chat específico
+    Route::get('/chats/{id}/quizz', [ChatController::class, 'showQuizz'])->name('chats.quizz.show');
+    Route::post('/chats/{id}/quizz/start', [ChatController::class, 'startQuizz'])->name('chats.quizz.start');
+    Route::post('/chats/{id}/quizz/submit', [ChatController::class, 'submitQuizz'])->name('chats.quizz.submit');
+
+// Ruta para mostrar el quizz asociado a un chat específico
+Route::get('/chats/{chat}/quizz', [ChatController::class, 'showQuizz'])->name('chats.quizz.show');
+
+// Ruta para evaluar el quizz
+Route::post('/chats/{chat}/quizz/evaluate', [ChatController::class, 'evaluateQuizz'])->name('chats.quizz.evaluate');
 
 
     Route::resource('interacciones', InteraccionController::class);
@@ -72,6 +84,7 @@ Route::middleware(['auth', 'role:2'])->group(function () {
     Route::get('/profesor/chats/{chat}/edit', [ProfesorController::class, 'chatsEdit'])->name('profesor.chats.edit');
     Route::put('/profesor/chats/{chat}', [ProfesorController::class, 'chatsUpdate'])->name('profesor.chats.update');
     Route::delete('/profesor/chats/{chat}', [ProfesorController::class, 'chatsDestroy'])->name('profesor.chats.destroy');
+    
 
     // Opción de desloguearse
     Route::post('/profesor/logout', [ProfesorController::class, 'logout'])->name('profesor.logout');

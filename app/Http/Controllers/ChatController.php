@@ -166,5 +166,61 @@ class ChatController extends Controller
 
         return response()->json($questions);
     }
+
+    // Muestra un quizz asociado a un chat específico
+public function showQuizz($chatId)
+{
+    // Obtener el chat por ID
+    $chat = Chat::with('curso')->findOrFail($chatId);
+
+    // Obtener preguntas aleatorias del dataset
+    $questions = $this->getRandomQuestions(10); // Cambia '10' al número de preguntas que deseas
+
+    return view('chats.quizz', compact('chat', 'questions'));
+}
+
+// Función auxiliar para obtener preguntas aleatorias
+private function getRandomQuestions($numQuestions)
+{
+    $dataSet = $this->loadDataSet();
+
+    // Barajar el dataset y obtener las primeras $numQuestions preguntas
+    shuffle($dataSet);
+    return array_slice($dataSet, 0, $numQuestions);
+}
+// Evalúa el quizz y calcula la puntuación
+public function evaluateQuizz(Request $request, $chatId)
+{
+    $correctAnswers = 0;
+    $totalQuestions = count($request->questions);
+
+    // Comparar respuestas del usuario con las correctas
+    foreach ($request->questions as $questionId => $userAnswer) {
+        $dataSet = $this->loadDataSet();
+        $correctAnswer = $this->getAnswerByQuestionId($questionId, $dataSet);
+
+        if (strtolower(trim($userAnswer)) === strtolower(trim($correctAnswer))) {
+            $correctAnswers++;
+        }
+    }
+
+    // Calcular la puntuación
+    $score = ($correctAnswers / $totalQuestions) * 100;
+
+    // Mostrar la puntuación o guardarla en la base de datos según tu lógica
+    return redirect()->route('chats.show', $chatId)->with('success', "Tu puntuación es: $score%");
+}
+
+// Obtener la respuesta correcta usando el ID de la pregunta
+private function getAnswerByQuestionId($questionId, $dataSet)
+{
+    foreach ($dataSet as $data) {
+        if ($data['problem_id'] == $questionId) {
+            return $data['solutions']; // Asegúrate de que 'solutions' es la columna correcta
+        }
+    }
+    return null;
+}
+
     
 }
