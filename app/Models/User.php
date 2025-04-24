@@ -19,6 +19,11 @@ class User extends Authenticatable
     {
         return 'correo'; // Cambia esto a 'correo'
     }
+// En el modelo User
+public function resultados()
+{
+    return $this->hasMany(Resultado::class, 'id_usuario', 'id_usuario');
+}
 
     // Relación con la tabla Roles (un usuario tiene un rol)
     public function rol()

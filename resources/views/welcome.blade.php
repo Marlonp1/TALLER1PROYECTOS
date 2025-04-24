@@ -6,7 +6,7 @@
         <div class="col-md-8">
             <div class="card shadow-lg rounded border-0" style="background: rgba(255, 255, 255, 0.85);">
                 <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                    <h4 class="mb-0">{{ __('Panel de Control') }}</h4>
+                    <h4 class="mb-0">{{ __('Panel de Inicio') }}</h4>
                     <span class="badge bg-success">{{ __('En línea') }}</span>
                 </div>
 
@@ -35,9 +35,9 @@
                         <div class="col-md-12 mb-4">
                             <div class="card shadow-sm border-success">
                                 <div class="card-body">
-                                    <h5 class="card-title">{{ __('Chats') }}</h5>
-                                    <p class="card-text">{{ __('Inicia o revisa tus chats.') }}</p>
-                                    <a href="{{ route('chats.index') }}" class="btn btn-outline-success">{{ __('Ir a Chats') }}</a>
+                                    <h5 class="card-title">{{ __('Evaluaciones') }}</h5>
+                                    <p class="card-text">{{ __('Inicia o revisa tus Evaluaciones.') }}</p>
+                                    <a href="{{ route('chats.index') }}" class="btn btn-outline-success">{{ __('Ir a las Evaluaciones') }}</a>
                                 </div>
                             </div>
                         </div>

@@ -14,37 +14,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ProfesorController;
 use App\Http\Controllers\QuizzController;
-
-
-Route::get('/quizz', [QuizzController::class, 'index'])->name('quizz.index');
-// Rutas de roles
-Route::middleware(['auth'])->group(function () {
-    Route::resource('roles', RolController::class);
-    Route::resource('cursos', CursoController::class);
-
-    Route::get('/chats', [ChatController::class, 'index'])->name('chats.index');
-    Route::get('chats/{id}', [ChatController::class, 'show'])->name('chats.show');
-    Route::post('/chats', [ChatController::class, 'store'])->name('chats.store');
-   // Rutas para el Quizz dentro de un chat específico
-    Route::get('/chats/{id}/quizz', [ChatController::class, 'showQuizz'])->name('chats.quizz.show');
-    Route::post('/chats/{id}/quizz/start', [ChatController::class, 'startQuizz'])->name('chats.quizz.start');
-    Route::post('/chats/{id}/quizz/submit', [ChatController::class, 'submitQuizz'])->name('chats.quizz.submit');
-
-// Ruta para mostrar el quizz asociado a un chat específico
-Route::get('/chats/{chat}/quizz', [ChatController::class, 'showQuizz'])->name('chats.quizz.show');
-
-// Ruta para evaluar el quizz
-Route::post('/chats/{chat}/quizz/evaluate', [ChatController::class, 'evaluateQuizz'])->name('chats.quizz.evaluate');
-
-
-    Route::resource('interacciones', InteraccionController::class);
-
-    // Rutas de preguntas frecuentes
-    Route::resource('preguntas-frecuentes', PreguntaFrecuenteController::class);
-
-    // Rutas de respuestas automatizadas
-    Route::resource('respuestas', RespuestaAutomatizadaController::class);
-});
+use App\Http\Controllers\ResultadoController;
 
 // Ruta principal (opcional)
 Route::get('/', function () {
@@ -54,10 +24,39 @@ Route::get('/', function () {
 // Autenticación
 Auth::routes();
 
+// Rutas de resultados
+Route::get('/resultados', [ResultadoController::class, 'index'])->name('resultados');
+
 // Ruta de inicio de sesión
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::post('/guardar-resultado', [QuizzController::class, 'guardarResultado'])->name('guardarResultado');
 
-// Rutas para el profesor
+// Rutas de roles
+Route::middleware(['auth'])->group(function () {
+    Route::resource('roles', RolController::class);
+    Route::resource('cursos', CursoController::class);
+
+    // Rutas de resultados
+    Route::post('/guardar-resultado', [ResultadoController::class, 'guardarResultado'])->name('guardarResultado');
+    Route::get('/resultados', [ResultadoController::class, 'index'])->name('resultados.index');  // Solo esta línea
+
+    // Rutas de chats
+    Route::get('/chats', [ChatController::class, 'index'])->name('chats.index');
+    Route::get('chats/{id}', [ChatController::class, 'show'])->name('chats.show');
+    Route::post('/chats', [ChatController::class, 'store'])->name('chats.store');
+    
+    // Rutas para el Quizz dentro de un chat específico
+    Route::get('/chats/{id}/quizz', [ChatController::class, 'showQuizz'])->name('chats.quizz.show');
+    Route::post('/chats/{id}/quizz/start', [ChatController::class, 'startQuizz'])->name('chats.quizz.start');
+    Route::post('/chats/{id}/quizz/submit', [ChatController::class, 'submitQuizz'])->name('chats.quizz.submit');
+    Route::post('/chats/{chat}/quizz/evaluate', [ChatController::class, 'evaluateQuizz'])->name('chats.quizz.evaluate');
+
+    Route::resource('interacciones', InteraccionController::class);
+    Route::resource('preguntas-frecuentes', PreguntaFrecuenteController::class);
+    Route::resource('respuestas', RespuestaAutomatizadaController::class);
+});
+
+// Rutas para el profesor (middleware con rol de profesor)
 Route::middleware(['auth', 'role:2'])->group(function () {
     Route::get('/profesor', [ProfesorController::class, 'index'])->name('profesor.index');
 
@@ -84,7 +83,6 @@ Route::middleware(['auth', 'role:2'])->group(function () {
     Route::get('/profesor/chats/{chat}/edit', [ProfesorController::class, 'chatsEdit'])->name('profesor.chats.edit');
     Route::put('/profesor/chats/{chat}', [ProfesorController::class, 'chatsUpdate'])->name('profesor.chats.update');
     Route::delete('/profesor/chats/{chat}', [ProfesorController::class, 'chatsDestroy'])->name('profesor.chats.destroy');
-    
 
     // Opción de desloguearse
     Route::post('/profesor/logout', [ProfesorController::class, 'logout'])->name('profesor.logout');

@@ -3,293 +3,228 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chatbot Educativo</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+    <title>Quizz Divertido para Niños de Primaria</title>
     <style>
+        /* Estilos que ya tienes */
         body {
-            font-family: 'Poppins', sans-serif;
-            background-color: #e0f7fa; /* Fondo suave */
+            font-family: 'Arial', sans-serif;
+            background: url('https://i.pinimg.com/originals/1b/83/dc/1b83dce6c2a59c92d2dfdd14df85c377.gif') no-repeat center center fixed;
+            background-size: cover;
+            color: #fff;
             margin: 0;
             padding: 0;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
-            height: 100vh;
-            color: #333;
-        }
-        .container {
-            width: 90%;
-            max-width: 800px;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-            overflow: hidden;
+            justify-content: center;
+            min-height: 100vh;
         }
         h1 {
-            background: linear-gradient(135deg, #4a90e2, #00bcd4); /* Degradado colorido */
-            color: white;
-            padding: 20px;
+            font-size: 3em;
+            margin-bottom: 20px;
             text-align: center;
-            margin: 0;
-            font-weight: 600;
-            font-size: 2rem;
         }
-        #chatLog {
-            height: 400px;
-            padding: 15px;
-            overflow-y: auto;
-            border-top: 1px solid #ddd;
-            border-bottom: 1px solid #ddd;
-            background-color: #fafafa;
-            border-radius: 0 0 15px 15px; /* Esquinas redondeadas */
-            font-size: 1.1rem;
-        }
-        #userMessage {
-            width: calc(100% - 140px);
-            padding: 12px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            margin: 10px;
-            font-size: 1rem;
-            display: inline-block; /* Para que se ajuste con el botón */
-        }
-        button {
-            padding: 12px 20px;
-            border: none;
-            border-radius: 5px;
-            background-color: #4a90e2;
-            color: white;
-            cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.3s ease;
-            margin: 10px;
-            font-size: 1rem;
-            display: inline-block; /* Para alinear con el input */
-        }
-        button:hover {
-            background-color: #00bcd4; /* Color en hover */
-            transform: translateY(-3px); /* Efecto de elevación */
-        }
-        .message {
-            margin: 10px 0;
-            padding: 10px;
-            border-radius: 5px;
-            position: relative;
-            max-width: 80%; /* Limitar el ancho del mensaje */
-            clear: both; /* Asegurar que cada mensaje esté en una nueva línea */
-        }
-        .message.user {
-            text-align: right;
-            color: white;
-            background-color: #4a90e2; /* Color de fondo del usuario */
-            border-radius: 10px 10px 0 10px;
-            margin-left: auto; /* Alinear a la derecha */
-        }
-        .message.chatbot {
-            text-align: left;
-            color: #333;
-            background-color: #f0f4f8; /* Color de fondo del chatbot */
-            border-radius: 10px 10px 10px 0; /* Esquinas redondeadas */
-            margin-right: auto; /* Alinear a la izquierda */
-        }
-        #suggestions {
-            margin: 15px 0;
-            font-style: italic;
-            color: #666;
+        .button-container {
             display: flex;
-            flex-direction: column;
-            align-items: center; /* Centrar sugerencias */
+            gap: 15px;
+            margin-bottom: 20px;
         }
-        #suggestions button {
-            background-color: #81d4fa; /* Color de fondo para sugerencias */
-            margin: 5px 0; /* Espaciado entre botones */
-            width: 80%; /* Hacer los botones más anchos */
-            text-align: left; /* Alinear texto a la izquierda */
-            border-radius: 5px; /* Esquinas redondeadas */
+        .button-container button {
+            background: #FFC107;
+            color: #333;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
         }
-        #suggestions button:hover {
-            background-color: #4fc3f7; /* Color en hover */
+        .button-container button:hover {
+            background: #FF9800;
+            transform: scale(1.1);
+        }
+        #difficulty-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .answer-button {
+            background: #4CAF50;
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 25px;
+            width: 100%;
+            font-size: 1.1em;
+            cursor: pointer;
+            margin: 10px 0;
+            transition: transform 0.2s, background 0.3s;
+        }
+        .answer-button:hover {
+            background: #43A047;
+            transform: scale(1.05);
+        }
+        .answer-button.correct { background: #66BB6A; }
+        .answer-button.incorrect { background: #E57373; }
+        #question-container, #result-container {
+            display: none;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 600px;
+            margin-top: 20px;
+        }
+        #result-container {
+            background: rgba(0, 0, 0, 0.6);
+        }
+
+        /* Estilos para los botones de reiniciar y ver resultados */
+        .result-button {
+            background-color: #2196F3;
+            color: white;
+            font-size: 1.2em;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.3s;
+            margin: 10px;
+        }
+
+        .result-button:hover {
+            background-color: #1976D2;
+            transform: scale(1.1);
+        }
+
+        .result-button:active {
+            transform: scale(0.98);
         }
     </style>
-    <script>
-        // Cargar el dataset en JavaScript
-        const dataSet = @json($dataSet); // Asegúrate de tener tu dataset con preguntas y respuestas
-
-        // Inicializar el chat
-        function initializeChat() {
-            const chatLog = document.getElementById('chatLog');
-            chatLog.innerHTML += `<div class="message chatbot"><strong>Chatbot:</strong> ¡Hola! ¿En qué puedo ayudarte hoy?</div>`;
-            updateSuggestions(); // Inicializar preguntas sugeridas
-            chatLog.scrollTop = chatLog.scrollHeight; // Desplazar hacia abajo
-        }
-
-        // Obtener preguntas sugeridas de forma completamente aleatoria
-        function getRandomQuestions() {
-            const shuffledQuestions = dataSet
-                .map(item => item.question)
-                .sort(() => 0.5 - Math.random()); // Mezclar preguntas aleatoriamente
-            return shuffledQuestions.slice(0, 3); // Devolver las primeras 3 preguntas
-        }
-
-        // Actualizar preguntas sugeridas
-        function updateSuggestions() {
-            const suggestionsContainer = document.getElementById('suggestions');
-            suggestionsContainer.innerHTML = '<strong>Preguntas Sugeridas:</strong>';
-            const randomQuestions = getRandomQuestions();
-
-            randomQuestions.forEach(question => {
-                suggestionsContainer.innerHTML += `<button onclick="selectSuggestion('${question}')">${question}</button>`;
-            });
-
-            // Si no hay preguntas, mostrar un mensaje de "sin sugerencias"
-            if (suggestionsContainer.innerHTML === '<strong>Preguntas Sugeridas:</strong>') {
-                suggestionsContainer.innerHTML += ' No hay preguntas disponibles.';
-            }
-        }
-
-        // Obtener respuesta del chatbot
-        function getChatbotResponse(userMessage) {
-            const lowerCaseMessage = userMessage.toLowerCase().trim(); // Normaliza el mensaje del usuario
-
-            // Respuestas a saludos
-            const greetings = ["hola", "buenos días", "buenas tardes", "buenas noches", "qué tal", "cómo estás"];
-            const farewells = ["adiós", "hasta luego", "nos vemos", "chau"];
-            const insults = ["tonto", "estúpido", "idiota", "imbécil", "pendejo", "maldito"];
-
-            // Responder a saludos
-            if (greetings.some(greeting => lowerCaseMessage.includes(greeting))) {
-                return "¡Hola! ¿Cómo puedo ayudarte hoy?";
-            }
-
-            // Responder a despedidas
-            if (farewells.some(farewell => lowerCaseMessage.includes(farewell))) {
-                return "¡Hasta luego! Si necesitas ayuda, aquí estaré.";
-            }
-
-            // Responder a insultos
-            if (insults.some(insult => lowerCaseMessage.includes(insult))) {
-                return "No es necesario usar palabras hirientes. Estoy aquí para ayudar.";
-            }
-
-            let bestMatch = '';
-            let highestSimilarity = 0;
-
-            // Buscar la mejor coincidencia en el dataset
-            for (const item of dataSet) {
-                const currentQuestion = item.question.toLowerCase().trim(); // Normaliza la pregunta
-                const similarity = calculateSimilarity(lowerCaseMessage, currentQuestion);
-                if (similarity > highestSimilarity) {
-                    highestSimilarity = similarity;
-                    bestMatch = item.answer; // Cambiar a item.answer para obtener la respuesta
-                }
-            }
-
-            // Cambiar el umbral para la respuesta
-            if (highestSimilarity > 0.3) { // Ajustar el umbral a 0.3
-                return bestMatch;
-            } else {
-                // Si no hay coincidencias, dar una respuesta alternativa
-                return 'Lo siento, no tengo una respuesta para eso. ¿Puedes reformular la pregunta?';
-            }
-        }
-
-        // Seleccionar una pregunta sugerida
-        function selectSuggestion(question) {
-            document.getElementById('userMessage').value = question; // Establecer el valor del input
-            sendMessage(); // Enviar el mensaje automáticamente
-        }
-
-        // Función para corregir el texto
-        // Función para corregir el texto ingresado por el usuario
-        function correctText(userMessage) {
-            // Asegurarse de que la pregunta termina con un signo de interrogación
-            if (!userMessage.endsWith('?')) {
-                userMessage += '?'; // Añadir signo de interrogación al final
-            }
-
-            // Asegurarse de que la pregunta comience con un signo de interrogación si es necesario
-            if (!userMessage.startsWith('¿')) {
-                userMessage = '¿' + userMessage; // Añadir signo de interrogación al inicio
-            }
-
-            // Aplicar tildes solo a palabras específicas (ejemplo para "cómo" y "estás")
-            userMessage = userMessage.replace(/como/gi, 'cómo');
-            userMessage = userMessage.replace(/estas/gi, 'estás');
-            userMessage = userMessage.replace(/mas/gi, 'más');
-            userMessage = userMessage.replace(/donde/gi, 'dónde');
-            userMessage = userMessage.replace(/que/gi, 'qué');
-            userMessage = userMessage.replace(/quien/gi, 'quién');
-            userMessage = userMessage.replace(/cuanto/gi, 'cuánto');
-            userMessage = userMessage.replace(/cuando/gi, 'cuándo');
-            userMessage = userMessage.replace(/cual/gi, 'cuál');
-            userMessage = userMessage.replace(/porque/gi, 'por qué');
-            return userMessage.trim(); // Limpiar espacios
-        }
-    function goToQuizz() {
-    // Redirigir a la página del Quizz
-    window.location.href = 'http://localhost:8080/ConsolidadoPruebasGrupo01/public/quizz';
-}
-
-        // Enviar el mensaje
-        function sendMessage() {
-            const userMessageInput = document.getElementById('userMessage');
-            const userMessage = userMessageInput.value;
-
-            if (userMessage.trim() === '') {
-                return; // No enviar si está vacío
-            }
-
-            // Corregir el mensaje del usuario
-            const correctedMessage = correctText(userMessage);
-            userMessageInput.value = ''; // Limpiar el input
-
-            const chatLog = document.getElementById('chatLog');
-            chatLog.innerHTML += `<div class="message user"><strong>Tú:</strong> ${correctedMessage}</div>`;
-            chatLog.scrollTop = chatLog.scrollHeight; // Desplazar hacia abajo
-
-            // Obtener la respuesta del chatbot
-            const response = getChatbotResponse(correctedMessage);
-            chatLog.innerHTML += `<div class="message chatbot"><strong>Chatbot:</strong> ${response}</div>`;
-            chatLog.scrollTop = chatLog.scrollHeight; // Desplazar hacia abajo
-
-            updateSuggestions(); // Actualizar sugerencias después de cada mensaje
-        }
-
-        // Calcular similitud entre dos cadenas (puedes usar otro método si lo prefieres)
-        function calculateSimilarity(str1, str2) {
-            let matches = 0;
-            const words1 = str1.split(' ');
-            const words2 = str2.split(' ');
-
-            words1.forEach(word1 => {
-                if (words2.includes(word1)) {
-                    matches++;
-                }
-            });
-
-            return matches / Math.max(words1.length, words2.length); // Normalizar por longitud
-        }
-
-        // Inicializar el chat al cargar la página
-        window.onload = initializeChat;
-    </script>
 </head>
 <body>
-    <div class="container">
-        <h1>Chatbot Educativo</h1>
-        <div id="chatLog"></div>
-        <div>
-            <input type="text" id="userMessage" placeholder="Escribe tu pregunta aquí...">
-            <button onclick="sendMessage()">Enviar</button>
+    <h1>Quizz Divertido para Niños de Primaria</h1>
+    
+    <div id="difficulty-container">
+        <h2>Selecciona la dificultad</h2>
+        <div class="button-container">
+            <button onclick="startQuiz('easy')">Fácil</button>
+            <button onclick="startQuiz('medium')">Medio</button>
+            <button onclick="startQuiz('hard')">Difícil</button>
         </div>
-        <div id="suggestions"></div>
-        <div style="text-align: center; margin-top: 15px;">
-            <button onclick="goToQuizz()" style="padding: 12px 30px; border: none; border-radius: 5px; background-color: #ff7043; color: white; cursor: pointer; transition: background-color 0.3s ease; font-size: 1rem;">
-                Ir a Quizz
-            </button>
-            
-        </div>
-        
     </div>
+
+    <div id="question-container">
+        <h2 id="question"></h2>
+        <div id="answers"></div>
+    </div>
+
+    <div id="result-container">
+        <h3 id="result"></h3>
+        <button class="result-button" onclick="restartQuiz()">Reiniciar</button>
+        <button class="result-button" id="view-results" onclick="viewResults()" style="display:none;">Ver Resultados</button>
+    </div>
+
+    <script>
+        const questions = {
+            easy: [
+                { question: "¿Cuánto es 2 + 2?", answers: ["3", "4", "5"], correct: "4" },
+                { question: "¿Cuántos días tiene una semana?", answers: ["5", "6", "7"], correct: "7" },
+                { question: "¿En qué continente está Perú?", answers: ["Asia", "Europa", "América"], correct: "América" },
+                { question: "¿Cuál es el color del sol?", answers: ["Rojo", "Amarillo", "Azul"], correct: "Amarillo" },
+                { question: "¿Cómo se llama el presidente de Perú?", answers: ["Pedro Castillo", "Dina Boluarte", "Ollanta Humala"], correct: "Dina Boluarte" }
+            ],
+            medium: [
+                { question: "¿Cuántos países hay en América del Sur?", answers: ["9", "12", "14"], correct: "12" },
+                { question: "¿Cuántos meses tiene un año?", answers: ["10", "11", "12"], correct: "12" },
+                { question: "¿Cuál es la capital de Francia?", answers: ["Madrid", "Roma", "París"], correct: "París" },
+                { question: "¿Cuántos continentes hay?", answers: ["5", "6", "7"], correct: "7" },
+                { question: "¿Quién pintó la Mona Lisa?", answers: ["Picasso", "Da Vinci", "Van Gogh"], correct: "Da Vinci" }
+            ],
+            hard: [
+                { question: "¿Cuál es el número atómico del oro?", answers: ["79", "89", "64"], correct: "79" },
+                { question: "¿Qué órgano produce la insulina?", answers: ["Estómago", "Hígado", "Páncreas"], correct: "Páncreas" },
+                { question: "¿Quién escribió 'Don Quijote de la Mancha'?", answers: ["Miguel de Cervantes", "Federico García Lorca", "Mario Vargas Llosa"], correct: "Miguel de Cervantes" },
+                { question: "¿Qué tipo de animal es el delfín?", answers: ["Mamífero", "Reptil", "Pájaro"], correct: "Mamífero" },
+                { question: "¿Qué país tiene la mayor población del mundo?", answers: ["India", "China", "Estados Unidos"], correct: "China" }
+            ]
+        };
+
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let selectedDifficulty = '';
+        let startTime = 0;
+
+        function startQuiz(difficulty) {
+            selectedDifficulty = difficulty;
+            currentQuestionIndex = 0;
+            score = 0;
+            startTime = new Date().getTime();  // Iniciar el tiempo
+            document.getElementById("difficulty-container").style.display = "none";
+            document.getElementById("question-container").style.display = "block";
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const questionData = questions[selectedDifficulty][currentQuestionIndex];
+            document.getElementById("question").innerText = questionData.question;
+            const answersContainer = document.getElementById("answers");
+            answersContainer.innerHTML = '';
+
+            questionData.answers.forEach(answer => {
+                const button = document.createElement('button');
+                button.classList.add('answer-button');
+                button.innerText = answer;
+                button.onclick = () => checkAnswer(answer);
+                answersContainer.appendChild(button);
+            });
+        }
+
+        function checkAnswer(selectedAnswer) {
+            const questionData = questions[selectedDifficulty][currentQuestionIndex];
+            const answerButtons = document.querySelectorAll('.answer-button');
+
+            answerButtons.forEach(button => {
+                button.disabled = true;
+                if (button.innerText === questionData.correct) {
+                    button.classList.add('correct');
+                }
+                if (button.innerText === selectedAnswer && selectedAnswer !== questionData.correct) {
+                    button.classList.add('incorrect');
+                }
+            });
+
+            if (selectedAnswer === questionData.correct) {
+                score++;
+            }
+
+            currentQuestionIndex++;
+
+            if (currentQuestionIndex < questions[selectedDifficulty].length) {
+                setTimeout(showQuestion, 1000);
+            } else {
+                setTimeout(showResult, 1000);
+            }
+        }
+
+        function showResult() {
+            document.getElementById("question-container").style.display = "none";
+            const resultMessage = `¡Terminado! Has respondido correctamente ${score} de ${questions[selectedDifficulty].length} preguntas.`;
+            document.getElementById("result").innerText = resultMessage;
+            document.getElementById("result-container").style.display = "block";
+            document.getElementById("view-results").style.display = "block";  // Mostrar el botón de resultados
+        }
+
+        function restartQuiz() {
+            document.getElementById("result-container").style.display = "none";
+            document.getElementById("difficulty-container").style.display = "block";
+        }
+
+        // Función para redirigir a los resultados
+        function viewResults() {
+            const userName = "Nombre del Usuario";  // Aquí puedes obtener el nombre del usuario desde sesión o input
+            const timeTaken = ((new Date().getTime() - startTime) / 1000).toFixed(2);  // Calcular el tiempo en segundos
+            window.location.href = "{{ route('resultados.index') }}?score=" + score + "&totalQuestions=" + questions[selectedDifficulty].length + "&user_name=" + userName + "&time_taken=" + timeTaken + "&difficulty=" + selectedDifficulty;
+        }
+    </script>
 </body>
 </html>

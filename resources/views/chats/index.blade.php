@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container mt-5">
-    <h2 class="text-center text-primary mb-4">{{ __('Chats Disponibles') }}</h2>
+    <h2 class="text-center text-primary mb-4">{{ __('Evaluaciones Disponibles') }}</h2>
     
     <!-- Campo de búsqueda -->
     <div class="mb-4">
@@ -10,7 +10,7 @@
             type="text" 
             id="searchInput" 
             class="form-control" 
-            placeholder="{{ __('Buscar curso...') }}" 
+            placeholder="{{ __('Buscar Evaluaciones...') }}" 
             onkeyup="filterCourses()"
         >
     </div>
@@ -21,7 +21,7 @@
                 <div class="card shadow-lg border-primary">
                     <div class="card-body text-center">
                         <h5 class="card-title text-success">{{ $chat->curso->nombre_curso }}</h5>
-                        <p class="card-text text-muted">{{ __('Profesor: ') }} <strong>{{ $chat->curso->profesor->nombre }}</strong></p>
+                        <p class="card-text text-muted">{{ __('Responsable: ') }} <strong>{{ $chat->curso->profesor->nombre }}</strong></p>
                         <button 
                             class="btn btn-primary mt-3 btn-lg" 
                             style="transition: background-color 0.3s, transform 0.3s;"
@@ -29,7 +29,7 @@
                             onmouseover="this.style.backgroundColor='#0d6efd'; this.style.transform='scale(1.05';"
                             onmouseout="this.style.backgroundColor='#0d6efd'; this.style.transform='scale(1)';"
                         >
-                            {{ __('Iniciar Chat') }}
+                            {{ __('Iniciar Quizz') }}
                         </button>
                     </div>
                 </div>
