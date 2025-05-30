@@ -11,12 +11,30 @@ class ChatController extends Controller
 {
     // Muestra todos los chats y los cursos disponibles
     public function index()
-    {
-        $cursos = Curso::all(); // Obtener todos los cursos disponibles
-        $chats = Chat::with('curso')->get();
+{
+    // Obtener todos los chats con relación a curso y profesor
+    $chats = Chat::with('curso.profesor')->get();
 
-        return view('chats.index', compact('chats', 'cursos')); // Pasar ambos a la vista
-    }
+    // Recomendaciones manuales (pueden ser enlaces a recursos externos)
+    $recomendaciones = [
+        (object)[
+            'titulo' => 'Cultura General',
+            'url' => 'https://www.youtube.com/watch?v=9xZBRk3TtQI&ab_channel=DosisdeCultura'
+        ],
+        (object)[
+            'titulo' => 'Matemáticas',
+            'url' => 'https://www.youtube.com/watch?v=Qr98YD4bvXE&ab_channel=PlayQuiz-Trivia'
+        ],
+        (object)[
+            'titulo' => 'Razonamiento Verbal',
+            'url' => 'https://www.youtube.com/watch?v=VW5T3zVb_y8&ab_channel=ElBa%C3%BAldeThot'
+        ],
+    ];
+
+    // Pasar datos a la vista
+    return view('chats.index', compact('chats', 'recomendaciones'));
+}
+
 
     // Crea un nuevo chat
     public function store(Request $request)

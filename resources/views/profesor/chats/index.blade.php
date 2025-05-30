@@ -2,9 +2,9 @@
 
 @section('content')
 <div class="container mt-5">
-    <h1 class="text-center mb-4 text-primary">{{ __('Chats') }}</h1>
+    <h1 class="text-center mb-4 text-primary">{{ __('Quizz Activos') }}</h1>
     <div class="text-end mb-3">
-        <a href="{{ route('profesor.chats.create') }}" class="btn btn-primary">{{ __('Crear Chat') }}</a>
+        <a href="{{ route('profesor.chats.create') }}" class="btn btn-primary">{{ __('Activar Quizz') }}</a>
     </div>
     <table class="table table-striped table-bordered">
         <thead class="table-light">
