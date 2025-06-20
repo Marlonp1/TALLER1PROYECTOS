@@ -15,7 +15,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\ProfesorController;
 use App\Http\Controllers\QuizzController;
 use App\Http\Controllers\ResultadoController;
-
+use App\Http\Controllers\EvaluacionUsuarioController;
 // Ruta principal (opcional)
 Route::get('/', function () {
     return view('welcome'); // Puedes redirigir a una vista específica
@@ -86,4 +86,6 @@ Route::middleware(['auth', 'role:2'])->group(function () {
 
     // Opción de desloguearse
     Route::post('/profesor/logout', [ProfesorController::class, 'logout'])->name('profesor.logout');
+Route::post('/evaluacion/guardar', [EvaluacionUsuarioController::class, 'guardar'])->name('evaluacion.guardar');
+
 });
